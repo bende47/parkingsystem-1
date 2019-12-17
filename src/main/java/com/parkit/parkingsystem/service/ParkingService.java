@@ -13,7 +13,7 @@ import java.util.Date;
 
 public class ParkingService {
 
-    private static final Logger logger = LogManager.getLogger("ParkingService");
+    private static Logger logger = LogManager.getLogger("ParkingService");
 
     private static FareCalculatorService fareCalculatorService = new FareCalculatorService();
 
@@ -26,7 +26,7 @@ public class ParkingService {
         this.parkingSpotDAO = parkingSpotDAO;
         this.ticketDAO = ticketDAO;
     }
-
+    
     public void processIncomingVehicle() {
         try{
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
@@ -34,8 +34,7 @@ public class ParkingService {
                 String vehicleRegNumber = getVehichleRegNumber();
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
-
-                Date inTime = new Date();
+                Date inTime = new Date(System.currentTimeMillis());
                 Ticket ticket = new Ticket();
                 //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
                 //ticket.setId(ticketID);
@@ -53,7 +52,29 @@ public class ParkingService {
             logger.error("Unable to process incoming vehicle",e);
         }
     }
-
+    
+    public void processExitingVehicle(){
+        try{
+            String vehicleRegNumber = getVehichleRegNumber();
+            Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
+            Date outTime = new Date(System.currentTimeMillis());
+            ticket.setOutTime(outTime);
+            fareCalculatorService.calculateFare(ticket);
+            if(ticketDAO.updateTicket(ticket)) {
+                ParkingSpot parkingSpot = ticket.getParkingSpot();
+                parkingSpot.setAvailable(true);
+                parkingSpotDAO.updateParking(parkingSpot);
+                System.out.println("Please pay the parking fare:" + ticket.getPrice());
+                System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
+            }else{
+                System.out.println("Unable to update ticket information. Error occurred");
+            }
+        }catch(Exception e){
+            logger.error("Unable to process exiting vehicle",e);
+            throw new RuntimeException("Unable to process exiting vehicle");
+        }
+    }
+    
     private String getVehichleRegNumber() throws Exception {
         System.out.println("Please type the vehicle registration number and press enter key");
         return inputReaderUtil.readVehicleRegistrationNumber();
@@ -78,7 +99,7 @@ public class ParkingService {
         return parkingSpot;
     }
 
-    private ParkingType getVehichleType(){
+    private ParkingType getVehichleType() throws Exception{
         System.out.println("Please select vehicle type from menu");
         System.out.println("1 CAR");
         System.out.println("2 BIKE");
@@ -96,25 +117,8 @@ public class ParkingService {
             }
         }
     }
-
-    public void processExitingVehicle() {
-        try{
-            String vehicleRegNumber = getVehichleRegNumber();
-            Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
-            Date outTime = new Date();
-            ticket.setOutTime(outTime);
-            fareCalculatorService.calculateFare(ticket);
-            if(ticketDAO.updateTicket(ticket)) {
-                ParkingSpot parkingSpot = ticket.getParkingSpot();
-                parkingSpot.setAvailable(true);
-                parkingSpotDAO.updateParking(parkingSpot);
-                System.out.println("Please pay the parking fare:" + ticket.getPrice());
-                System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
-            }else{
-                System.out.println("Unable to update ticket information. Error occurred");
-            }
-        }catch(Exception e){
-            logger.error("Unable to process exiting vehicle",e);
-        }
+    public void setLogger(Logger logger) {
+    	this.logger = logger;
     }
+
 }

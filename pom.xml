@@ -54,6 +54,12 @@
             <version>0.8.5</version>
             <type>maven-plugin</type>
         </dependency>
+		<dependency>
+		    <groupId>org.assertj</groupId>
+		    <artifactId>assertj-core</artifactId>
+		    <version>3.14.0</version>
+		    <scope>test</scope>
+		</dependency>
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-assembly-plugin</artifactId>
@@ -132,7 +138,7 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>jacoco-report</id>
+                        <id>report</id>
                         <phase>test</phase>
                         <goals>
                             <goal>report</goal>

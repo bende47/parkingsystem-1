@@ -5,12 +5,12 @@ import com.parkit.parkingsystem.constants.ParkingType;
 public class ParkingSpot {
     private int number;
     private ParkingType parkingType;
-    private boolean isAvailable;
+    private boolean isItAvailable;
 
-    public ParkingSpot(int number, ParkingType parkingType, boolean isAvailable) {
+    public ParkingSpot(int number, ParkingType parkingType, boolean isItAvailable) {
         this.number = number;
         this.parkingType = parkingType;
-        this.isAvailable = isAvailable;
+        this.isItAvailable = isItAvailable;
     }
 
     public int getId() {
@@ -29,12 +29,12 @@ public class ParkingSpot {
         this.parkingType = parkingType;
     }
 
-    public boolean isAvailable() {
-        return isAvailable;
+    public boolean isItAvailable() {
+        return isItAvailable;
     }
 
     public void setAvailable(boolean available) {
-        isAvailable = available;
+        isItAvailable = available;
     }
 
     @Override

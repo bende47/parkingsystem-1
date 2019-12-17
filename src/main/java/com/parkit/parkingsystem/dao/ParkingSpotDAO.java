@@ -38,12 +38,12 @@ public class ParkingSpotDAO {
     }
 
     public boolean updateParking(ParkingSpot parkingSpot){
-        //update the availability fo that parking slot
+        //update the availability to that parking slot
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_PARKING_SPOT);
-            ps.setBoolean(1, parkingSpot.isAvailable());
+            ps.setBoolean(1, parkingSpot.isItAvailable());
             ps.setInt(2, parkingSpot.getId());
             int updateRowCount = ps.executeUpdate();
             dataBaseConfig.closePreparedStatement(ps);
