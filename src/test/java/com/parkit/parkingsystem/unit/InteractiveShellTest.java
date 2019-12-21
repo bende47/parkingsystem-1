@@ -1,12 +1,9 @@
 package com.parkit.parkingsystem.unit;
 
-import static org.mockito.Mockito.doNothing;
-
 import org.mockito.Mock;
 
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
-import com.parkit.parkingsystem.service.InteractiveShell;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 

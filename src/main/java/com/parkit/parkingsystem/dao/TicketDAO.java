@@ -1,21 +1,23 @@
 package com.parkit.parkingsystem.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.DBConstants;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
 
 public class TicketDAO {
 
-    private static final Logger logger = LogManager.getLogger("TicketDAO");
+    private static Logger logger = LogManager.getLogger("TicketDAO");
 
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
@@ -33,7 +35,8 @@ public class TicketDAO {
             ps.setTimestamp(5, (ticket.getOutTime() == null)?null: (new Timestamp(ticket.getOutTime().getTime())) );
             return ps.execute();
         }catch (Exception ex){
-            logger.error("Error fetching next available slot",ex);
+         	logger.error("Error fetching next available slot",ex);
+            //throw new Exception("Error fetching next available slot", ex);
         }finally {
             dataBaseConfig.closeConnection(con);
             return false;
@@ -86,6 +89,25 @@ public class TicketDAO {
         }
         return false;
     }
-    
 
+	public void setLogger(Logger testlogger) {
+		this.logger = testlogger;
+		
+	}
+    
+	public boolean availableReduction5Percent(Ticket ticket) throws ClassNotFoundException, SQLException {
+		Connection con = null;
+		con = dataBaseConfig.getConnection();
+		PreparedStatement ps = con.prepareStatement(DBConstants.GET_REGNUMBER);
+		ps.setString(1, ticket.getVehicleRegNumber());
+		ResultSet rs = ps.executeQuery();
+		int occurences = 0;
+		while (rs.next())
+			occurences++;
+		System.out.println("This vehicule has been kept here " + occurences + " times.");
+		if (occurences > 1)
+			return true;
+		else
+			return false;
+	}
 }
