@@ -11,6 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.nio.charset.Charset;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Random;
 
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -54,7 +56,7 @@ public class ParkingServiceTest {
 	private static int randomplace;
 
 	private static String regNumberString;
-	@Spy
+	@Mock
 	private static FareCalculatorService fareCalculatorService = new FareCalculatorService();
 
 	@BeforeEach
@@ -73,6 +75,7 @@ public class ParkingServiceTest {
 			ticket.setPrice(10.5);
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			parkingService.setLogger(testlogger);
+			parkingService.setfarecalculatorservice(fareCalculatorService);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("Failed to set up test mock objects");
@@ -82,7 +85,8 @@ public class ParkingServiceTest {
 	@Test
 	public void processExitingVehicleTest() throws Exception {
 		// GIVEN
-		doNothing().when(fareCalculatorService).calculateFare(any(Ticket.class));
+		when(ticketDAO.availableReduction5Percent(any(Ticket.class))).thenReturn(true);
+		doNothing().when(fareCalculatorService).calculateFare(any(Ticket.class), Mockito.anyBoolean());
 		when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
 		when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
 		when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
@@ -99,22 +103,28 @@ public class ParkingServiceTest {
 		// GIVEN
 		when(inputReaderUtil.readSelection()).thenReturn(1);
 		when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(randomplace);
+		when(parkingSpotDAO.noDoubleRegNumber(regNumberString)).thenReturn(true);
+		when(parkingSpotDAO.updateParking(parkingSpot)).thenReturn(true);
 		// WHEN
 		parkingService.processIncomingVehicle();
 		// THEN
 		verify(parkingSpotDAO, times(1)).updateParking(parkingSpot);
+		verify(parkingSpotDAO, times(1)).getNextAvailableSlot(ParkingType.CAR);
+		verify(parkingSpotDAO, times(1)).noDoubleRegNumber(regNumberString);
 		assertEquals(parkingSpot.getId(), randomplace);
 	}
 
 
-	 @Test public void incomingVehiculeCouldTakeTheSameParkingSpotThanTheSameExitingVehicule(){
+	 @Test public void incomingVehiculeCouldTakeTheSameParkingSpotThanTheSameExitingVehicule() throws ClassNotFoundException, SQLException{
 		 
 	//GIVEN
 	 //doNothing().when(fareCalculatorService).calculateFare(any(Ticket.class));
 	 when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
 	 when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
 	 when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
-	 
+	 when(ticketDAO.availableReduction5Percent(any(Ticket.class))).thenReturn(true);
+	 doNothing().when(fareCalculatorService).calculateFare(any(Ticket.class), Mockito.anyBoolean());
+		
 	//WHEN
 	 parkingService.processExitingVehicle(); 
 	 
@@ -125,6 +135,7 @@ public class ParkingServiceTest {
 	//GIVEN
 	 when(inputReaderUtil.readSelection()).thenReturn(1);
 	 when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(randomplace);
+	 when(parkingSpotDAO.noDoubleRegNumber(regNumberString)).thenReturn(true);
 	 
 	//WHEN
 	 parkingService.processIncomingVehicle(); 

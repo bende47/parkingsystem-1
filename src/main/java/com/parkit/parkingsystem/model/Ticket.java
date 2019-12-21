@@ -39,7 +39,7 @@ public class Ticket {
     }
 
     public void setPrice(double price) {
-        this.price = price;
+        this.price = Math.round(price*100)/100.00;
     }
 
     public Date getInTime() {

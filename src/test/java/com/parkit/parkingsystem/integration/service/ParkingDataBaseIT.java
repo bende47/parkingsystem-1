@@ -74,23 +74,19 @@ public class ParkingDataBaseIT {
 
 
     @Test
-    public void testParkingLotExit(){
-        testParkingACar();
+    public void testParkingLotExit() throws InterruptedException{
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-
-		int randomplace = new Random().nextInt(100) + 1;
-		ParkingSpot parkingSpot = new ParkingSpot(randomplace, ParkingType.CAR, false);
-		ticket = new Ticket();
-		ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
-		ticket.setParkingSpot(parkingSpot);
-		ticket.setVehicleRegNumber(regNumberString);
+		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(regNumberString);
+        parkingService.processIncomingVehicle();
+        ticket = ticketDAO.getTicket(regNumberString);
+        Thread.sleep(1000);
         parkingService.processExitingVehicle();
         Ticket ticket2 = ticketDAO.getTicket(regNumberString);
 
         assertNotNull(ticket2.getPrice());
         assertNotNull(ticket2.getOutTime());
-        //assertTrue(ticket2.getInTime().getTime() < ticket2.getOutTime().getTime());
-        //assertTrue(ticket2.getOutTime().getTime() < new Date(System.currentTimeMillis()).getTime());
+        assertEquals(ticket2.getInTime(), ticket.getInTime());
+        assertEquals(ticket2.getVehicleRegNumber(), ticket.getVehicleRegNumber());
         //TODO: check that the fare generated and out time are populated correctly in the database
     }
 
