@@ -3,50 +3,52 @@ package com.parkit.parkingsystem.model;
 import com.parkit.parkingsystem.constants.ParkingType;
 
 public class ParkingSpot {
-    private int number;
-    private ParkingType parkingType;
-    private boolean isItAvailable;
+	private int number;
+	private ParkingType parkingType;
+	private boolean isItAvailable;
 
-    public ParkingSpot(int number, ParkingType parkingType, boolean isItAvailable) {
-        this.number = number;
-        this.parkingType = parkingType;
-        this.isItAvailable = isItAvailable;
-    }
+	public ParkingSpot(int number, ParkingType parkingType, boolean isItAvailable) {
+		this.number = number;
+		this.parkingType = parkingType;
+		this.isItAvailable = isItAvailable;
+	}
 
-    public int getId() {
-        return number;
-    }
+	public int getId() {
+		return number;
+	}
 
-    public void setId(int number) {
-        this.number = number;
-    }
+	public void setId(int number) {
+		this.number = number;
+	}
 
-    public ParkingType getParkingType() {
-        return parkingType;
-    }
+	public ParkingType getParkingType() {
+		return parkingType;
+	}
 
-    public void setParkingType(ParkingType parkingType) {
-        this.parkingType = parkingType;
-    }
+	public void setParkingType(ParkingType parkingType) {
+		this.parkingType = parkingType;
+	}
 
-    public boolean isItAvailable() {
-        return isItAvailable;
-    }
+	public boolean isItAvailable() {
+		return isItAvailable;
+	}
 
-    public void setAvailable(boolean available) {
-        isItAvailable = available;
-    }
+	public void setAvailable(boolean available) {
+		isItAvailable = available;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ParkingSpot that = (ParkingSpot) o;
-        return number == that.number;
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		ParkingSpot that = (ParkingSpot) o;
+		return number == that.number;
+	}
 
-    @Override
-    public int hashCode() {
-        return number;
-    }
+	@Override
+	public int hashCode() {
+		return number;
+	}
 }

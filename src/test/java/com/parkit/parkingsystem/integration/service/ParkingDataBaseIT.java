@@ -29,65 +29,66 @@ import java.util.Random;
 @ExtendWith(MockitoExtension.class)
 public class ParkingDataBaseIT {
 
-    private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
-    private static ParkingSpotDAO parkingSpotDAO;
-    private static TicketDAO ticketDAO;
-    private static DataBasePrepareService dataBasePrepareService;
+	private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
+	private static ParkingSpotDAO parkingSpotDAO;
+	private static TicketDAO ticketDAO;
+	private static DataBasePrepareService dataBasePrepareService;
 	private static String regNumberString;
 	private static Ticket ticket;
-	
-    @Mock
-    private static InputReaderUtil inputReaderUtil;
 
-    @BeforeAll
-    private static void setUp(){
-        parkingSpotDAO = new ParkingSpotDAO();
-        parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
-        ticketDAO = new TicketDAO();
-        ticketDAO.dataBaseConfig = dataBaseTestConfig;
-        dataBasePrepareService = new DataBasePrepareService();
-    }
+	@Mock
+	private static InputReaderUtil inputReaderUtil;
 
-    @BeforeEach
-    private void setUpPerTest(){
-        when(inputReaderUtil.readSelection()).thenReturn(1);
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(regNumberString = "ABCDEF");
-        dataBasePrepareService.clearDataBaseEntries();
-    }
+	@BeforeAll
+	private static void setUp() {
+		parkingSpotDAO = new ParkingSpotDAO();
+		parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
+		ticketDAO = new TicketDAO();
+		ticketDAO.dataBaseConfig = dataBaseTestConfig;
+		dataBasePrepareService = new DataBasePrepareService();
+	}
 
-    @AfterEach
-    private void tearDown(){
-    	dataBasePrepareService.clearDataBaseEntries();
-    }
+	@BeforeEach
+	private void setUpPerTest() {
+		when(inputReaderUtil.readSelection()).thenReturn(1);
+		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(regNumberString = "ABCDEF");
+		dataBasePrepareService.clearDataBaseEntries();
+	}
 
-    @Test
-    public void testParkingACar(){
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        //int parkingPlace = parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR);
-        parkingService.processIncomingVehicle();
-        ticket = ticketDAO.getTicket(regNumberString);
-        System.out.println(ticketDAO.getTicket(regNumberString));
-        assertEquals(ticket.getVehicleRegNumber(), regNumberString);
-        assertEquals(ticket.getParkingSpot().isItAvailable(), false);
-        //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
-    }
+	@AfterEach
+	private void tearDown() {
+		dataBasePrepareService.clearDataBaseEntries();
+	}
 
+	@Test
+	public void testParkingACar() {
+		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		// int parkingPlace = parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR);
+		parkingService.processIncomingVehicle();
+		ticket = ticketDAO.getTicket(regNumberString);
+		System.out.println(ticketDAO.getTicket(regNumberString));
+		assertEquals(ticket.getVehicleRegNumber(), regNumberString);
+		assertEquals(ticket.getParkingSpot().isItAvailable(), false);
+		// TODO: check that a ticket is actualy saved in DB and Parking table is updated
+		// with availability
+	}
 
-    @Test
-    public void testParkingLotExit() throws InterruptedException{
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+	@Test
+	public void testParkingLotExit() throws InterruptedException {
+		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(regNumberString);
-        parkingService.processIncomingVehicle();
-        ticket = ticketDAO.getTicket(regNumberString);
-        Thread.sleep(1000);
-        parkingService.processExitingVehicle();
-        Ticket ticket2 = ticketDAO.getTicket(regNumberString);
+		parkingService.processIncomingVehicle();
+		ticket = ticketDAO.getTicket(regNumberString);
+		Thread.sleep(1000);
+		parkingService.processExitingVehicle();
+		Ticket ticket2 = ticketDAO.getTicket(regNumberString);
 
-        assertNotNull(ticket2.getPrice());
-        assertNotNull(ticket2.getOutTime());
-        assertEquals(ticket2.getInTime(), ticket.getInTime());
-        assertEquals(ticket2.getVehicleRegNumber(), ticket.getVehicleRegNumber());
-        //TODO: check that the fare generated and out time are populated correctly in the database
-    }
+		assertNotNull(ticket2.getPrice());
+		assertNotNull(ticket2.getOutTime());
+		assertEquals(ticket2.getInTime(), ticket.getInTime());
+		assertEquals(ticket2.getVehicleRegNumber(), ticket.getVehicleRegNumber());
+		// TODO: check that the fare generated and out time are populated correctly in
+		// the database
+	}
 
 }
