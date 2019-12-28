@@ -1,18 +1,10 @@
 package com.parkit.parkingsystem.service;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import com.parkit.parkingsystem.config.DataBaseConfig;
-import com.parkit.parkingsystem.constants.DBConstants;
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.model.Ticket;
 
 public class FareCalculatorService {
-
-	public static DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
 	public void calculateFare(Ticket ticket, Boolean availableReduction) throws ClassNotFoundException, SQLException {
 		if ((ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime()))) {
@@ -22,7 +14,6 @@ public class FareCalculatorService {
 		long intime = ticket.getInTime().getTime();
 		long outtime = ticket.getOutTime().getTime();
 		// I apply an addition of absolute time in millisecands then divide with a float
-		// to obtain the number of hours with two decimals
 		float duration = (float) ((outtime - intime) / 3600000.00);
 		if (duration > 0.5) {
 			System.out.println("\n//*************************************************//");

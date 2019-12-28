@@ -18,12 +18,12 @@ import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.parkit.parkingsystem.constants.ParkingType;
@@ -82,7 +82,8 @@ public class ParkingServiceTest {
 		}
 	}
 
-	@Test
+    @Test
+    @DisplayName("all process is call during exiting vehicle")
 	public void processExitingVehicleTest() throws Exception {
 		// GIVEN
 		when(ticketDAO.availableReduction5Percent(any(Ticket.class))).thenReturn(true);
@@ -98,7 +99,8 @@ public class ParkingServiceTest {
 		verify(inputReaderUtil, times(1)).readVehicleRegistrationNumber();
 	}
 
-	@Test
+    @Test
+    @DisplayName("all process is called during incomming vehicle, and park on the specified parking spot")
 	public void processIncomingVehicleTest() {
 		// GIVEN
 		when(inputReaderUtil.readSelection()).thenReturn(1);
@@ -114,11 +116,11 @@ public class ParkingServiceTest {
 		assertEquals(parkingSpot.getId(), randomplace);
 	}
 
-
-	 @Test public void incomingVehiculeCouldTakeTheSameParkingSpotThanTheSameExitingVehicule() throws ClassNotFoundException, SQLException{
+    @Test
+    @DisplayName("the same parking spot should turn to true during exiting then false during incoming")
+	public void incomingVehiculeCouldTakeTheSameParkingSpotThanTheSameExitingVehicule() throws ClassNotFoundException, SQLException{
 		 
 	//GIVEN
-	 //doNothing().when(fareCalculatorService).calculateFare(any(Ticket.class));
 	 when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
 	 when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
 	 when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
@@ -148,6 +150,7 @@ public class ParkingServiceTest {
 
 
 	@Test
+	@DisplayName("Should return exception if out-time is earlier than in-time")
 	public void shouldReturnException_ForOutimeBeforeIntimeAtExit() {
 		// GIVEN
 		ticket.setInTime(new Date(System.currentTimeMillis() + (60 * 60 * 1000)));

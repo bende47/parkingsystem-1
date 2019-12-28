@@ -9,19 +9,18 @@ import org.apache.logging.log4j.Logger;
 
 
 public class InteractiveShell {
-
+	
+    private static InputReaderUtil inputReaderUtil = new InputReaderUtil();
+    private static ParkingSpotDAO parkingSpotDAO = new ParkingSpotDAO();
+    private static TicketDAO ticketDAO = new TicketDAO();
+    private static ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+    private static boolean continueApp;
+    
     private static final Logger logger = LogManager.getLogger("InteractiveShell");
 
     public static void loadInterface() {
         logger.info("App initialized!!!");
         System.out.println("Welcome to Parking System!");
-
-        boolean continueApp = true;
-        InputReaderUtil inputReaderUtil = new InputReaderUtil();
-        ParkingSpotDAO parkingSpotDAO = new ParkingSpotDAO();
-        TicketDAO ticketDAO = new TicketDAO();
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-
         while(continueApp){
             loadMenu();
             int option = inputReaderUtil.readSelection();
