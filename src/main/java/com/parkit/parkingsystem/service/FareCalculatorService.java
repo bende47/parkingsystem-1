@@ -1,15 +1,21 @@
 package com.parkit.parkingsystem.service;
 
 import java.sql.SQLException;
+<<<<<<< HEAD
 
 import com.parkit.parkingsystem.config.DataBaseConfig;
+=======
+>>>>>>> featureJunitTest
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.model.Ticket;
 
 public class FareCalculatorService {
 
+<<<<<<< HEAD
 	public static DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
+=======
+>>>>>>> featureJunitTest
 	public void calculateFare(Ticket ticket, Boolean availableReduction) throws ClassNotFoundException, SQLException {
 		if ((ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime()))) {
 			throw new IllegalArgumentException("Out time provided is incorrect:" + ticket.getOutTime().toString());
@@ -18,7 +24,10 @@ public class FareCalculatorService {
 		long intime = ticket.getInTime().getTime();
 		long outtime = ticket.getOutTime().getTime();
 		// I apply an addition of absolute time in millisecands then divide with a float
+<<<<<<< HEAD
 		// to obtain the number of hours with two decimals
+=======
+>>>>>>> featureJunitTest
 		float duration = (float) ((outtime - intime) / 3600000.00);
 		if (duration > 0.5) {
 			System.out.println("\n//*************************************************//");
