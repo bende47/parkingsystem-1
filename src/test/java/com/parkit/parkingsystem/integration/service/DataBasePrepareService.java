@@ -19,8 +19,6 @@ public class DataBasePrepareService {
 			// clear ticket entries;
 			connection.prepareStatement("truncate table ticket").execute();
 
-<<<<<<< HEAD
-=======
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -28,5 +26,4 @@ public class DataBasePrepareService {
 		}
 	}
 
->>>>>>> featureJunitTest
 }

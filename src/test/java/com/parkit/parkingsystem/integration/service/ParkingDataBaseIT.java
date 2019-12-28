@@ -22,34 +22,19 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 @ExtendWith(MockitoExtension.class)
 public class ParkingDataBaseIT {
 
-<<<<<<< HEAD
-    private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
-    private static ParkingSpotDAO parkingSpotDAO;
-    private static TicketDAO ticketDAO;
-    private static DataBasePrepareService dataBasePrepareService;
-	
-    @Mock
-    private static InputReaderUtil inputReaderUtil;
-=======
+
 	private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
 	private static ParkingSpotDAO parkingSpotDAO;
 	private static TicketDAO ticketDAO;
 	private static DataBasePrepareService dataBasePrepareService;
 	private static String regNumberString;
 	private static Ticket ticket;
->>>>>>> featureJunitTest
+
 
 	@Mock
 	private static InputReaderUtil inputReaderUtil;
 
-<<<<<<< HEAD
-    @BeforeEach
-    private void setUpPerTest(){
-        when(inputReaderUtil.readSelection()).thenReturn(1);
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-        dataBasePrepareService.clearDataBaseEntries();
-    }
-=======
+
 	@BeforeAll
 	private static void setUp() {
 		parkingSpotDAO = new ParkingSpotDAO();
@@ -58,7 +43,6 @@ public class ParkingDataBaseIT {
 		ticketDAO.dataBaseConfig = dataBaseTestConfig;
 		dataBasePrepareService = new DataBasePrepareService();
 	}
->>>>>>> featureJunitTest
 
 	@BeforeEach
 	private void setUpPerTest() {
@@ -67,18 +51,11 @@ public class ParkingDataBaseIT {
 		dataBasePrepareService.clearDataBaseEntries();
 	}
 
-<<<<<<< HEAD
-    @Test
-    public void testParkingACar(){
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
-    }
-=======
 	@AfterEach
 	private void tearDown() {
 		dataBasePrepareService.clearDataBaseEntries();
 	}
->>>>>>> featureJunitTest
+
 
 	@Test
 	public void testParkingACar() {
@@ -93,13 +70,7 @@ public class ParkingDataBaseIT {
 		// with availability
 	}
 
-<<<<<<< HEAD
-    @Test
-    public void testParkingLotExit() throws InterruptedException{
 
-        //TODO: check that the fare generated and out time are populated correctly in the database
-    }
-=======
 	@Test
 	public void testParkingLotExit() throws InterruptedException {
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -117,6 +88,6 @@ public class ParkingDataBaseIT {
 		// TODO: check that the fare generated and out time are populated correctly in
 		// the database
 	}
->>>>>>> featureJunitTest
+
 
 }

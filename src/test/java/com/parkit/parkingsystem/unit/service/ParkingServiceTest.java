@@ -116,10 +116,7 @@ public class ParkingServiceTest {
 		assertEquals(parkingSpot.getId(), randomplace);
 	}
 
-<<<<<<< HEAD
 
-
-=======
     @Test
     @DisplayName("the same parking spot should turn to true during exiting then false during incoming")
 	public void incomingVehiculeCouldTakeTheSameParkingSpotThanTheSameExitingVehicule() throws ClassNotFoundException, SQLException{
@@ -167,5 +164,5 @@ public class ParkingServiceTest {
 		verify(testlogger, times(1)).error(anyString(),any(Throwable.class));
 		verify(ticketDAO, times(1)).getTicket(regNumberString);
 	}
->>>>>>> featureJunitTest
+
 }

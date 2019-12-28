@@ -13,7 +13,7 @@ public class InteractiveShell {
 	private static ParkingSpotDAO parkingSpotDAO = new ParkingSpotDAO();
 	private static TicketDAO ticketDAO = new TicketDAO();
 	private static ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-	private static boolean continueApp;
+	private static boolean continueApp =true;
 
 	private static final Logger logger = LogManager.getLogger("InteractiveShell");
 
