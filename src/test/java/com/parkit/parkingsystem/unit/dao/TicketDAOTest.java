@@ -1,7 +1,8 @@
 package com.parkit.parkingsystem.unit.dao;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
@@ -34,18 +35,20 @@ public class TicketDAOTest {
 
     private static Ticket ticket;
     
-	@Mock
-    private static Logger testlogger = LogManager.getLogger("TicketDAO");
-	@Mock
-    private static Logger testlogger3 = LogManager.getLogger("TicketDAO");
-	@Mock
-	private static DataBaseTestConfig dataBaseConfigMock = new DataBaseTestConfig();
+
     private static DataBaseTestConfig dataBaseConfig = new DataBaseTestConfig();
     private static DataBaseTestConfig dataBaseConfig2 = new DataBaseTestConfig();
     private static DataBasePrepareService dataBasePrepareService = new DataBasePrepareService();
     private static TicketDAO ticketDAO2;
     private static String regNumberString;
     
+	@Mock
+    private static Logger testlogger = LogManager.getLogger("TicketDAO");
+	@Mock
+    private static Logger testlogger3 = LogManager.getLogger("TicketDAO");
+	@Mock
+	private static DataBaseTestConfig dataBaseConfigMock = new DataBaseTestConfig();
+	
     @BeforeEach
     private void setUp(){
         ticketDAO = new TicketDAO();
@@ -85,16 +88,15 @@ public class TicketDAOTest {
         assertTrue(!test);
         assertEquals(ticket.getParkingSpot() , ticket2.getParkingSpot());
         System.out.println(" / " +ticket.getPrice() + " / " + ticket2.getPrice() + " / ");
-        assertEquals(ticket.getInTime().getTime()/10000 , ticket2.getInTime().getTime()/10000);
+        assertEquals(ticket.getInTime().getTime()/1000000 , ticket2.getInTime().getTime()/1000000);
         assertEquals(ticket.getVehicleRegNumber() , ticket2.getVehicleRegNumber());
-        assertEquals(12.0 , ticket.getPrice(), 0.00);
+        assertEquals(12.0 , ticket.getPrice());
 	}
 	
 	@Test
 	public void updateTicketShouldReturnDifferentValueThanPreviousTicket() {
 		
 		//ARRANGE
-
 
         //ACT
         Boolean test = ticketDAO2.saveTicket(ticket);
@@ -107,6 +109,7 @@ public class TicketDAOTest {
 
 	@Test
 	public void shouldReturnException_WhenDBConnectionFail() throws ClassNotFoundException, SQLException {
+		
 		// GIVEN
 	    
         TicketDAO ticketDAO3 = new TicketDAO();

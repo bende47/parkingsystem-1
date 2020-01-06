@@ -35,8 +35,7 @@ public class ParkingService {
 				String vehicleRegNumber = getVehichleRegNumber();
 				if (parkingSpotDAO.noDoubleRegNumber(vehicleRegNumber) == true) {
 					parkingSpot.setAvailable(false);
-					parkingSpotDAO.updateParking(parkingSpot);// allot this parking space and mark it's availability as
-																// false
+					parkingSpotDAO.updateParking(parkingSpot);
 					Date inTime = new Date(System.currentTimeMillis());
 					Ticket ticket = new Ticket();
 					ticket.setParkingSpot(parkingSpot);

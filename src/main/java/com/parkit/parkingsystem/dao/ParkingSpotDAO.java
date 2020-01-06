@@ -14,7 +14,7 @@ import com.parkit.parkingsystem.model.ParkingSpot;
 
 public class ParkingSpotDAO {
 
-	private static final Logger logger = LogManager.getLogger("ParkingSpotDAO");
+	private static Logger logger = LogManager.getLogger("ParkingSpotDAO");
 
 	public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
@@ -40,7 +40,6 @@ public class ParkingSpotDAO {
 	}
 
 	public boolean updateParking(ParkingSpot parkingSpot) {
-		// update the availability to that parking slot
 		Connection con = null;
 		try {
 			con = dataBaseConfig.getConnection();
@@ -80,7 +79,10 @@ public class ParkingSpotDAO {
 		System.out.println("Doublon:" + result);
 		return result;
 	}
-
+	
+	public void setLogger(Logger testlogger) {
+		this.logger = testlogger;
+	}
 
 
 }
