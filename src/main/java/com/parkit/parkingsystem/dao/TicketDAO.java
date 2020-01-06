@@ -94,8 +94,27 @@ public class TicketDAO {
 		return false;
 	}
 
-	public void setLogger(Logger testlogger) {
-		this.logger = testlogger;
+	public boolean noDoubleRegNumber(String vehicleRegNumber) {
+		Connection con = null;
+		boolean result = true;
+		try {
+			con = dataBaseConfig.getConnection();
+			PreparedStatement ps = con.prepareStatement(DBConstants.GET_SAME_REG_OCCUPIED);
+			ps.setString(1, vehicleRegNumber);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				result = false;
+				System.out.println("Doublon:" + result);
+			}
+			dataBaseConfig.closeResultSet(rs);
+			dataBaseConfig.closePreparedStatement(ps);
+		} catch (Exception ex) {
+			logger.error("Error fetching doublon registration numbers", ex);
+		} finally {
+			dataBaseConfig.closeConnection(con);
+		}
+		System.out.println("Doublon:" + result);
+		return result;
 	}
 
 
@@ -113,5 +132,10 @@ public class TicketDAO {
 			return true;
 		else
 			return false;
+	}
+
+	public void setLogger(Logger testlogger) {
+
+		this.logger = testlogger;
 	}
 }

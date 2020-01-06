@@ -103,14 +103,14 @@ public class ParkingServiceTest {
 		// GIVEN
 		when(inputReaderUtil.readSelection()).thenReturn(1);
 		when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(randomplace);
-		when(parkingSpotDAO.noDoubleRegNumber(regNumberString)).thenReturn(true);
+		when(ticketDAO.noDoubleRegNumber(regNumberString)).thenReturn(true);
 		when(parkingSpotDAO.updateParking(parkingSpot)).thenReturn(true);
 		// WHEN
 		parkingService.processIncomingVehicle();
 		// THEN
 		verify(parkingSpotDAO, times(1)).updateParking(parkingSpot);
 		verify(parkingSpotDAO, times(1)).getNextAvailableSlot(ParkingType.CAR);
-		verify(parkingSpotDAO, times(1)).noDoubleRegNumber(regNumberString);
+		verify(ticketDAO, times(1)).noDoubleRegNumber(regNumberString);
 		assertEquals(parkingSpot.getId(), randomplace);
 	}
 
@@ -136,7 +136,7 @@ public class ParkingServiceTest {
 	//GIVEN
 	 when(inputReaderUtil.readSelection()).thenReturn(1);
 	 when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(randomplace);
-	 when(parkingSpotDAO.noDoubleRegNumber(regNumberString)).thenReturn(true);
+	 when(ticketDAO.noDoubleRegNumber(regNumberString)).thenReturn(true);
 	 
 	//WHEN
 	 parkingService.processIncomingVehicle(); 

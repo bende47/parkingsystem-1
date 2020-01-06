@@ -33,7 +33,7 @@ public class ParkingService {
 			ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
 			if (parkingSpot != null && parkingSpot.getId() > 0) {
 				String vehicleRegNumber = getVehichleRegNumber();
-				if (parkingSpotDAO.noDoubleRegNumber(vehicleRegNumber) == true) {
+				if (ticketDAO.noDoubleRegNumber(vehicleRegNumber) == true) {
 					parkingSpot.setAvailable(false);
 					parkingSpotDAO.updateParking(parkingSpot);
 					Date inTime = new Date(System.currentTimeMillis());

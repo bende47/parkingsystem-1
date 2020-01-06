@@ -40,7 +40,9 @@ public class ParkingSpotDAOTest {
 	private static DataBasePrepareService dataBasePrepareService = new DataBasePrepareService();
 	
 	@Mock
-	private static Logger testlogger = LogManager.getLogger("TicketDAO");
+	private static Logger testlogger = LogManager.getLogger("ParkingSpotDAO");
+	@Mock
+	private static Logger testlogger3 = LogManager.getLogger("ParkingSpotDAO");
 	@Mock
 	private static DataBaseTestConfig dataBaseConfigMock = new DataBaseTestConfig();
 	
@@ -100,20 +102,22 @@ public class ParkingSpotDAOTest {
 		// ASSERT
 		assertEquals(1, result);
 	}
-/*	
 	@Test
-	public void shouldReturnFalseIfAVehicleNumberIsRecordedTwice() {
-		parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
-		ParkingSpot parkingSpot2 = new ParkingSpot(2, ParkingType.CAR, false);
-		// ACT
-		parkingSpotDAO.updateParking(parkingSpot);
-		parkingSpotDAO.updateParking(parkingSpot2);
-		parkingSpot.setAvailable(true);
-		parkingSpotDAO.updateParking(parkingSpot);
-		int result = parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR);
-		
-		// ASSERT
-		assertEquals(1, result);
+	public void shouldReturnException_WhenDBConnectionFail() throws ClassNotFoundException, SQLException {
+
+		// GIVEN
+		ParkingSpotDAO parkingSpotDAO3 = new ParkingSpotDAO();
+		parkingSpotDAO3.dataBaseConfig = dataBaseConfigMock;
+		ParkingSpot ParkingSpot2 = new ParkingSpot(1, ParkingType.CAR, false);
+		when(dataBaseConfigMock.getConnection()).thenThrow(new SQLException("Error occurred"));
+		parkingSpotDAO3.setLogger(testlogger3);
+
+		// WHEN
+		parkingSpotDAO3.updateParking(ParkingSpot2);
+		parkingSpotDAO3.getNextAvailableSlot(ParkingType.CAR);
+		// THEN
+		verify(testlogger3, times(2)).error(anyString(),any(Throwable.class));
+		verify(dataBaseConfigMock, times(2)).getConnection();
 	}
-	*/
+
 }
