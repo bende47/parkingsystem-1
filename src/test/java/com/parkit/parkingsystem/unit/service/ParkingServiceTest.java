@@ -15,11 +15,13 @@ import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -67,10 +69,11 @@ public class ParkingServiceTest {
 			parkingSpot = new ParkingSpot(randomplace, ParkingType.CAR, false);
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(regNumberString);
 			ticket = new Ticket();
-			ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
+			ticket.setInTime(new Date(1300000000L * 1000));
 			ticket.setParkingSpot(parkingSpot);
 			ticket.setVehicleRegNumber(regNumberString);
-			ticket.setPrice(10.5);
+			ticket.setPrice(0);
+			ticket.setOutTime(null);
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			parkingService.setLogger(testlogger);
 			parkingService.setfarecalculatorservice(fareCalculatorService);
@@ -84,6 +87,7 @@ public class ParkingServiceTest {
     @DisplayName("all process is call during exiting vehicle")
 	public void processExitingVehicleTest() throws Exception {
 		// GIVEN
+		ArgumentCaptor<ParkingSpot> parkingSpotArgCapt = ArgumentCaptor.forClass(ParkingSpot.class);
 		when(ticketDAO.availableReduction5Percent(any(Ticket.class))).thenReturn(true);
 		doNothing().when(fareCalculatorService).calculateFare(any(Ticket.class), Mockito.anyBoolean());
 		when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
@@ -93,25 +97,46 @@ public class ParkingServiceTest {
 		parkingService.processExitingVehicle();
 		// THEN
 		verify(ticketDAO, times(1)).getTicket(anyString());
-		verify(parkingSpotDAO, times(1)).updateParking(any(ParkingSpot.class));
+		verify(ticketDAO, times(1)).availableReduction5Percent(any(Ticket.class));
+		verify(parkingSpotDAO, times(1)).updateParking(parkingSpotArgCapt.capture());
 		verify(inputReaderUtil, times(1)).readVehicleRegistrationNumber();
+		Assertions.assertThat(parkingSpotArgCapt.getValue().isItAvailable())
+				.isEqualTo(true);
+		Assertions.assertThat(parkingSpotArgCapt.getValue().getParkingType())
+				.isEqualTo(ParkingType.CAR);
+		Assertions.assertThat(parkingSpotArgCapt.getValue().getId())
+				.isEqualTo(randomplace);
+
 	}
 
     @Test
     @DisplayName("all process is called during incomming vehicle, and park on the specified parking spot")
 	public void processIncomingVehicleTest() {
 		// GIVEN
+		ArgumentCaptor<Ticket> ticketArgCapt = ArgumentCaptor.forClass(Ticket.class);
 		when(inputReaderUtil.readSelection()).thenReturn(1);
 		when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(randomplace);
 		when(ticketDAO.noDoubleRegNumber(regNumberString)).thenReturn(true);
 		when(parkingSpotDAO.updateParking(parkingSpot)).thenReturn(true);
+
 		// WHEN
 		parkingService.processIncomingVehicle();
+
 		// THEN
 		verify(parkingSpotDAO, times(1)).updateParking(parkingSpot);
 		verify(parkingSpotDAO, times(1)).getNextAvailableSlot(ParkingType.CAR);
 		verify(ticketDAO, times(1)).noDoubleRegNumber(regNumberString);
-		assertEquals(parkingSpot.getId(), randomplace);
+		verify(ticketDAO, times(1)).saveTicket(ticketArgCapt.capture());
+		Assertions.assertThat(ticketArgCapt.getValue().getPrice())
+				.isEqualTo(ticket.getPrice());
+		Assertions.assertThat(ticketArgCapt.getValue().getVehicleRegNumber())
+				.isEqualTo(ticket.getVehicleRegNumber());
+		Assertions.assertThat(ticketArgCapt.getValue().getParkingSpot())
+				.isEqualTo(ticket.getParkingSpot());
+		Assertions.assertThat(ticketArgCapt.getValue().getInTime())
+				.isAfter(ticket.getInTime());
+		Assertions.assertThat(ticketArgCapt.getValue().getOutTime())
+				.isEqualTo(ticket.getOutTime());
 	}
 
 
@@ -143,8 +168,7 @@ public class ParkingServiceTest {
 	 
 	//THEN 
 	 verify(parkingSpotDAO, times(2)).updateParking(parkingSpot); 
-	 assertEquals(parkingSpot.getId(),randomplace); 
-	 //assertTrue(parkingService.processIncomingVehicle().parkingSpot.isItAvailable()); 
+	 assertEquals(parkingSpot.getId(),randomplace);
 	 }
 
 

@@ -48,15 +48,10 @@
     <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-utils:3.0.22" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven.shared:file-management:1.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-container-default:1.0-alpha-9" level="project" />
-    <orderEntry type="library" name="Maven: junit:junit:3.8.1" level="project" />
     <orderEntry type="library" name="Maven: classworlds:classworlds:1.1-alpha-2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven.reporting:maven-reporting-api:3.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven.doxia:doxia-sink-api:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven.reporting:maven-reporting-impl:2.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.maven:maven-project:2.0.10" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.maven:maven-profile:2.0.10" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.maven:maven-artifact-manager:2.0.10" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.maven:maven-plugin-registry:2.0.10" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven.doxia:doxia-core:1.1.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven.doxia:doxia-logging-api:1.1.2" level="project" />
     <orderEntry type="library" name="Maven: xerces:xercesImpl:2.8.1" level="project" />
@@ -105,5 +100,52 @@
     <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-io:2.7.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-archiver:3.1.1" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.6" level="project" />
+    <orderEntry type="library" name="Maven: org.pitest:pitest-maven:1.4.10" level="project" />
+    <orderEntry type="library" name="Maven: org.pitest:pitest-entry:1.4.10" level="project" />
+    <orderEntry type="library" name="Maven: org.pitest:pitest-html-report:1.4.10" level="project" />
+    <orderEntry type="library" name="Maven: org.pitest:pitest-aggregator:1.4.10" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven:maven-project:2.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven:maven-profile:2.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven:maven-artifact-manager:2.2.1" level="project" />
+    <orderEntry type="library" name="Maven: backport-util-concurrent:backport-util-concurrent:3.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven:maven-plugin-registry:2.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven.scm:maven-scm-api:1.9.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven.scm:maven-scm-manager-plexus:1.9.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.maven.scm:maven-scm-provider-accurev:1.9.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.maven.scm:maven-scm-provider-bazaar:1.9.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.maven.scm:maven-scm-provider-clearcase:1.9.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.maven.scm:maven-scm-provider-cvsexe:1.9.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.maven.scm:maven-scm-provider-cvs-commons:1.9.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.maven.scm:maven-scm-provider-cvsjava:1.9.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.netbeans.lib:cvsclient:20060125" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: ch.ethz.ganymed:ganymed-ssh2:build210" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.maven.scm:maven-scm-provider-gitexe:1.9.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.maven.scm:maven-scm-provider-git-commons:1.9.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.maven.scm:maven-scm-provider-hg:1.9.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.maven.scm:maven-scm-provider-perforce:1.9.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.maven.scm:maven-scm-provider-starteam:1.9.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.maven.scm:maven-scm-provider-svnexe:1.9.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.maven.scm:maven-scm-provider-svn-commons:1.9.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.maven.scm:maven-scm-provider-synergy:1.9.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.maven.scm:maven-scm-provider-vss:1.9.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.maven.scm:maven-scm-provider-tfs:1.9.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.maven.scm:maven-scm-provider-integrity:1.9.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: com.mks.api:mksapi-jar:4.10.9049" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.codehaus.groovy:groovy-all:1.7.6" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.maven.scm:maven-scm-provider-jazz:1.9.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven.surefire:surefire-booter:2.17" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven.surefire:surefire-api:2.17" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven.surefire:maven-surefire-common:2.17" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven.plugin-tools:maven-plugin-annotations:3.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven:maven-plugin-descriptor:2.0.9" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven:maven-toolchain:2.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:jul-to-slf4j:1.7.12" level="project" />
+    <orderEntry type="library" name="Maven: uk.org.lidalia:sysout-over-slf4j:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.pitest:pitest-junit5-plugin:0.11" level="project" />
+    <orderEntry type="library" name="Maven: eu.stamp-project:descartes:1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.pitest:pitest:1.2.0" level="project" />
+    <orderEntry type="library" name="Maven: junit:junit:4.11" level="project" />
+    <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
   </component>
 </module>
