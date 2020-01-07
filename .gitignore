@@ -1,8 +1,10 @@
 /target/
 /.classpath
 /*.project
-/.settings
 /.idea/
 /CrunchifyTest.log
 /parking-system.iml
 /credentials.properties
+/.settings/
+/log/
+/parking-system.iml
