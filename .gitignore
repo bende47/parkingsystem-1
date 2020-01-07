@@ -2,7 +2,7 @@
 /.classpath
 /*.project
 /.settings
-/.idea
+/.idea/
 /CrunchifyTest.log
 /parking-system.iml
 /credentials.properties
