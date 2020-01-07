@@ -9,6 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -60,8 +61,6 @@ public class TicketDAOTest {
         ticket.setParkingSpot(new ParkingSpot(3, ParkingType.CAR,false));
         ticket.setVehicleRegNumber(regNumberString = "ABCDEF");
         ticket.setPrice(12);
-        ticketDAO2 = new TicketDAO();
-        ticketDAO2.dataBaseConfig = dataBaseConfig2;
     }
     
     @AfterEach
@@ -71,17 +70,11 @@ public class TicketDAOTest {
 
 	@Test
 	public void ticketSavedShouldReturnSameValueByTheGetTicketMethod() {
-		
-		//ARRANGE
-        
-		//when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
-        //when(dataBaseConfig.getConnection()).thenReturn());
-        //ticket.setOutTime(new Date(System.currentTimeMillis()));
-        
+
         //ACT
-        Boolean test = ticketDAO2.saveTicket(ticket);
+        Boolean test = ticketDAO.saveTicket(ticket);
         Ticket ticket2 = new Ticket();
-        ticket2 = ticketDAO2.getTicket(regNumberString);
+        ticket2 = ticketDAO.getTicket(regNumberString);
         
         
         //ASSERT
@@ -95,23 +88,20 @@ public class TicketDAOTest {
 	
 	@Test
 	public void updateTicketShouldReturnDifferentValueThanPreviousTicket() {
-		
-		//ARRANGE
 
         //ACT
-        Boolean test = ticketDAO2.saveTicket(ticket);
+        Boolean test = ticketDAO.saveTicket(ticket);
         ticket.setOutTime(new Date());
-        Boolean test2 = ticketDAO2.updateTicket(ticket);
+        Boolean test2 = ticketDAO.updateTicket(ticket);
         //ASSERT
         assertTrue(!test);
         assertTrue(test2);
 	}
 
 	@Test
-	public void shouldReturnException_WhenDBConnectionFail() throws ClassNotFoundException, SQLException {
+	public void shouldReturnException_WhenDBConnectionFail() throws ClassNotFoundException, SQLException, IOException {
 		
 		// GIVEN
-	    
         TicketDAO ticketDAO3 = new TicketDAO();
         ticketDAO3.dataBaseConfig = dataBaseConfigMock;
 	    Ticket ticket3 = new Ticket();
@@ -119,10 +109,21 @@ public class TicketDAOTest {
 		ticketDAO3.setLogger(testlogger3);
 		
 		// WHEN
-		
 		ticketDAO3.saveTicket(ticket3);
+
 		// THEN
 		verify(testlogger3, times(1)).error(anyString(),any(Throwable.class));
 		verify(dataBaseConfigMock, times(1)).getConnection();
 	}
+
+    @Test
+    public void shouldReturnFalseIfAVehicleNumberIsRecordedTwice() {
+        //ARRANGE
+        ticketDAO.saveTicket(ticket);
+        // ACT
+        boolean test = ticketDAO.noDoubleRegNumber(regNumberString);
+
+        // ASSERT
+        assertTrue(!test);
+    }
 }

@@ -17,7 +17,7 @@ import com.parkit.parkingsystem.model.Ticket;
 
 public class TicketDAO {
 
-	private static Logger logger = LogManager.getLogger("TicketDAO");
+	private Logger logger = LogManager.getLogger("TicketDAO");
 
 
 	public DataBaseConfig dataBaseConfig = new DataBaseConfig();
@@ -25,9 +25,10 @@ public class TicketDAO {
 
 	public boolean saveTicket(Ticket ticket) {
 		Connection con = null;
+		PreparedStatement ps = null;
 		try {
 			con = dataBaseConfig.getConnection();
-			PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_TICKET);
+			ps = con.prepareStatement(DBConstants.SAVE_TICKET);
 			// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
 			// ps.setInt(1,ticket.getId());
 			ps.setInt(1, ticket.getParkingSpot().getId());
@@ -40,21 +41,24 @@ public class TicketDAO {
 			logger.error("Error fetching next available slot", ex);
 			// throw new Exception("Error fetching next available slot", ex);
 		} finally {
-			dataBaseConfig.closeConnection(con);
-			return false;
+		    try { if (ps != null) ps.close(); } catch (Exception e) {logger.error("Error closing next available slot", e);};
+		    try { if (con != null) con.close(); } catch (Exception e) {logger.error("Error closing next available slot", e);};
 		}
+		return false;
 	}
 
 
 	public Ticket getTicket(String vehicleRegNumber) {
 		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		Ticket ticket = null;
 		try {
 			con = dataBaseConfig.getConnection();
-			PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET);
+			ps = con.prepareStatement(DBConstants.GET_TICKET);
 			// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
 			ps.setString(1, vehicleRegNumber);
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			if (rs.next()) {
 				ticket = new Ticket();
 				ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(1), ParkingType.valueOf(rs.getString(6)), false);
@@ -65,22 +69,23 @@ public class TicketDAO {
 				ticket.setInTime(rs.getTimestamp(4));
 				ticket.setOutTime(rs.getTimestamp(5));
 			}
-			dataBaseConfig.closeResultSet(rs);
-			dataBaseConfig.closePreparedStatement(ps);
 		} catch (Exception ex) {
 			logger.error("Error fetching next available slot", ex);
 		} finally {
-			dataBaseConfig.closeConnection(con);
-			return ticket;
+		    try { if (rs != null) rs.close(); } catch (Exception e) {logger.error("Error closing get ticket", e);};
+		    try { if (ps != null) ps.close(); } catch (Exception e) {logger.error("Error closing get ticket", e);};
+		    try { if (con != null) con.close(); } catch (Exception e) {logger.error("Error closing get ticket", e);};
 		}
+		return ticket;
 	}
 
 
 	public boolean updateTicket(Ticket ticket) {
 		Connection con = null;
+		PreparedStatement ps = null;
 		try {
 			con = dataBaseConfig.getConnection();
-			PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_TICKET);
+			ps = con.prepareStatement(DBConstants.UPDATE_TICKET);
 			ps.setDouble(1, ticket.getPrice());
 			ps.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));
 			ps.setInt(3, ticket.getId());
@@ -89,29 +94,65 @@ public class TicketDAO {
 		} catch (Exception ex) {
 			logger.error("Error saving ticket info", ex);
 		} finally {
-			dataBaseConfig.closeConnection(con);
+		    try { if (ps != null) ps.close(); } catch (Exception e) {logger.error("Error closing get ticket", e);};
+		    try { if (con != null) con.close(); } catch (Exception e) {logger.error("Error closing get ticket", e);};
 		}
 		return false;
 	}
 
-	public void setLogger(Logger testlogger) {
-		this.logger = testlogger;
+	public boolean noDoubleRegNumber(String vehicleRegNumber) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean result = true;
+		try {
+			con = dataBaseConfig.getConnection();
+			ps = con.prepareStatement(DBConstants.GET_SAME_REG_OCCUPIED);
+			ps.setString(1, vehicleRegNumber);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				result = false;
+				System.out.println("Doublon:" + result);
+			}
+		} catch (Exception ex) {
+			logger.error("Error fetching doublon registration numbers", ex);
+		} finally {
+		    try { if (rs != null) rs.close(); } catch (Exception e) {logger.error("Error closing get ticket", e);};
+		    try { if (ps != null) ps.close(); } catch (Exception e) {logger.error("Error closing get ticket", e);};
+		    try { if (con != null) con.close(); } catch (Exception e) {logger.error("Error closing get ticket", e);};
+		}
+		System.out.println("Doublon:" + result);
+		return result;
 	}
 
 
 	public boolean availableReduction5Percent(Ticket ticket) throws ClassNotFoundException, SQLException {
 		Connection con = null;
-		con = dataBaseConfig.getConnection();
-		PreparedStatement ps = con.prepareStatement(DBConstants.GET_REGNUMBER);
-		ps.setString(1, ticket.getVehicleRegNumber());
-		ResultSet rs = ps.executeQuery();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		int occurences = 0;
+		try {
+		con = dataBaseConfig.getConnection();
+		ps = con.prepareStatement(DBConstants.GET_REGNUMBER);
+		ps.setString(1, ticket.getVehicleRegNumber());
+		rs = ps.executeQuery();
 		while (rs.next())
 			occurences++;
 		System.out.println("This vehicule has been kept here " + occurences + " times.");
+		} catch (Exception ex) {
+			logger.error("Error fetching reduction5percent", ex);
+		} finally {
+		    try { if (rs != null) rs.close(); } catch (Exception e) {logger.error("Error closing reduction5percent", e);};
+		    try { if (ps != null) ps.close(); } catch (Exception e) {logger.error("Error closing reduction5percent", e);};
+		    try { if (con != null) con.close(); } catch (Exception e) {logger.error("Error closing reduction5percent", e);};
+		}
 		if (occurences > 1)
 			return true;
 		else
 			return false;
+	}
+
+	public void setLogger(Logger testlogger) {
+		this.logger = testlogger;
 	}
 }

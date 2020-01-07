@@ -65,8 +65,6 @@ public class ParkingDataBaseIT {
 		System.out.println(ticketDAO.getTicket(regNumberString));
 		assertEquals(ticket.getVehicleRegNumber(), regNumberString);
 		assertEquals(ticket.getParkingSpot().isItAvailable(), false);
-		// TODO: check that a ticket is actualy saved in DB and Parking table is updated
-		// with availability
 	}
 
 
@@ -84,8 +82,6 @@ public class ParkingDataBaseIT {
 		assertNotNull(ticket2.getOutTime());
 		assertEquals(ticket2.getInTime(), ticket.getInTime());
 		assertEquals(ticket2.getVehicleRegNumber(), ticket.getVehicleRegNumber());
-		// TODO: check that the fare generated and out time are populated correctly in
-		// the database
 	}
 
 

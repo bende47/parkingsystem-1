@@ -14,18 +14,21 @@ import com.parkit.parkingsystem.model.ParkingSpot;
 
 public class ParkingSpotDAO {
 
-	private static Logger logger = LogManager.getLogger("ParkingSpotDAO");
+	private Logger logger = LogManager.getLogger("ParkingSpotDAO");
 
 	public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
 	public int getNextAvailableSlot(ParkingType parkingType) {
 		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		int result = -1;
+		
 		try {
 			con = dataBaseConfig.getConnection();
-			PreparedStatement ps = con.prepareStatement(DBConstants.GET_NEXT_PARKING_SPOT);
+			ps = con.prepareStatement(DBConstants.GET_NEXT_PARKING_SPOT);
 			ps.setString(1, parkingType.toString());
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			if (rs.next()) {
 				result = rs.getInt(1);
 			}
@@ -34,16 +37,19 @@ public class ParkingSpotDAO {
 		} catch (Exception ex) {
 			logger.error("Error fetching next available slot", ex);
 		} finally {
-			dataBaseConfig.closeConnection(con);
+		    try { if (rs != null) rs.close(); } catch (Exception e) {logger.error("Error closing next available slot", e);};
+		    try { if (ps != null) ps.close(); } catch (Exception e) {logger.error("Error closing next available slot", e);};
+		    try { if (con != null) con.close(); } catch (Exception e) {logger.error("Error closing next available slot", e);};
 		}
 		return result;
 	}
 
 	public boolean updateParking(ParkingSpot parkingSpot) {
 		Connection con = null;
+		PreparedStatement ps = null;
 		try {
 			con = dataBaseConfig.getConnection();
-			PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_PARKING_SPOT);
+			ps = con.prepareStatement(DBConstants.UPDATE_PARKING_SPOT);
 			ps.setBoolean(1, parkingSpot.isItAvailable());
 			ps.setInt(2, parkingSpot.getId());
 			int updateRowCount = ps.executeUpdate();
@@ -53,31 +59,9 @@ public class ParkingSpotDAO {
 			logger.error("Error updating parking info", ex);
 			return false;
 		} finally {
-			dataBaseConfig.closeConnection(con);
+		    try { if (ps != null) ps.close(); } catch (Exception e) {logger.error("Error closing updating parking info", e);};
+		    try { if (con != null) con.close(); } catch (Exception e) {logger.error("Error closing updating parking info", e);};
 		}
-	}
-
-	public boolean noDoubleRegNumber(String vehicleRegNumber) {
-		Connection con = null;
-		boolean result = true;
-		try {
-			con = dataBaseConfig.getConnection();
-			PreparedStatement ps = con.prepareStatement(DBConstants.GET_SAME_REG_OCCUPIED);
-			ps.setString(1, vehicleRegNumber);
-			ResultSet rs = ps.executeQuery();
-			if (rs.next()) {
-				result = false;
-				System.out.println("Doublon:" + result);
-			}
-			dataBaseConfig.closeResultSet(rs);
-			dataBaseConfig.closePreparedStatement(ps);
-		} catch (Exception ex) {
-			logger.error("Error fetching doublon registration numbers", ex);
-		} finally {
-			dataBaseConfig.closeConnection(con);
-		}
-		System.out.println("Doublon:" + result);
-		return result;
 	}
 	
 	public void setLogger(Logger testlogger) {

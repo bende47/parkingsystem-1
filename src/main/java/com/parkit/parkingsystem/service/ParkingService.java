@@ -14,9 +14,9 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 
 public class ParkingService {
 
-	private static Logger logger = LogManager.getLogger("ParkingService");
+	public Logger logger = LogManager.getLogger("ParkingService");
 
-	private static FareCalculatorService fareCalculatorService = new FareCalculatorService();
+	public FareCalculatorService fareCalculatorService = new FareCalculatorService();
 
 	private InputReaderUtil inputReaderUtil;
 	private ParkingSpotDAO parkingSpotDAO;
@@ -33,7 +33,7 @@ public class ParkingService {
 			ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
 			if (parkingSpot != null && parkingSpot.getId() > 0) {
 				String vehicleRegNumber = getVehichleRegNumber();
-				if (parkingSpotDAO.noDoubleRegNumber(vehicleRegNumber) == true) {
+				if (ticketDAO.noDoubleRegNumber(vehicleRegNumber) == true) {
 					parkingSpot.setAvailable(false);
 					parkingSpotDAO.updateParking(parkingSpot);
 					Date inTime = new Date(System.currentTimeMillis());
@@ -123,14 +123,6 @@ public class ParkingService {
 			throw new IllegalArgumentException("Entered input is invalid");
 		}
 		}
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-
-	public void setfarecalculatorservice(FareCalculatorService fareCalculatorService) {
-		this.fareCalculatorService = fareCalculatorService;
 	}
 
 }
