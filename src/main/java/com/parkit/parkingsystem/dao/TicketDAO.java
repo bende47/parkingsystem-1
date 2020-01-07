@@ -94,8 +94,8 @@ public class TicketDAO {
 		} catch (Exception ex) {
 			logger.error("Error saving ticket info", ex);
 		} finally {
-		    try { if (ps != null) ps.close(); } catch (Exception e) {};
-		    try { if (con != null) con.close(); } catch (Exception e) {};
+		    try { if (ps != null) ps.close(); } catch (Exception e) {logger.error("Error closing get ticket", e);};
+		    try { if (con != null) con.close(); } catch (Exception e) {logger.error("Error closing get ticket", e);};
 		}
 		return false;
 	}

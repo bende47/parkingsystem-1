@@ -75,8 +75,8 @@ public class ParkingServiceTest {
 			ticket.setPrice(0);
 			ticket.setOutTime(null);
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-			parkingService.setLogger(testlogger);
-			parkingService.setfarecalculatorservice(fareCalculatorService);
+			parkingService.logger = testlogger;
+			parkingService.fareCalculatorService = fareCalculatorService;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("Failed to set up test mock objects");

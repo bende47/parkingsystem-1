@@ -1,10 +1,12 @@
 package com.parkit.parkingsystem.integration.config;
 
+import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,13 +17,22 @@ public class DataBaseTestConfig extends DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseTestConfig");
 
-    
-    public Connection getConnection() throws ClassNotFoundException, SQLException {
-        logger.info("Create DB connection");
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/test?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTC","root","bahamut0");
-    }
+       public Connection getConnection() throws ClassNotFoundException, SQLException {
+           logger.info("Create DB connection");
+           Class.forName("com.mysql.cj.jdbc.Driver");
+           String user = "";
+           String pass = "";
+           try (InputStream input = new FileInputStream("credentials.properties")) {
+               Properties prop = new Properties();
+               prop.load(input);
+               user = prop.getProperty("username");
+               pass = prop.getProperty("password");
+           } catch (IOException io) {
+               io.printStackTrace();
+           }
+           return DriverManager.getConnection(
+                   "jdbc:mysql://localhost:3306/prod?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTC",user ,pass );
+       }
 
     public void closeConnection(Connection con){
         if(con!=null){

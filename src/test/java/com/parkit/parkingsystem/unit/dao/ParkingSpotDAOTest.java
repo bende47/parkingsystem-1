@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.sql.SQLException;
 import java.util.Date;
@@ -103,7 +104,7 @@ public class ParkingSpotDAOTest {
 		assertEquals(1, result);
 	}
 	@Test
-	public void shouldReturnException_WhenDBConnectionFail() throws ClassNotFoundException, SQLException {
+	public void shouldReturnException_WhenDBConnectionFail() throws ClassNotFoundException, SQLException, IOException {
 
 		// GIVEN
 		ParkingSpotDAO parkingSpotDAO3 = new ParkingSpotDAO();
