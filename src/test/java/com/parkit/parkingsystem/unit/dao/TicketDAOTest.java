@@ -99,7 +99,7 @@ public class TicketDAOTest {
 	}
 
 	@Test
-	public void shouldReturnException_WhenDBConnectionFail() throws ClassNotFoundException, SQLException, IOException {
+	public void shouldReturnException_WhenDBConnectionFail() throws ClassNotFoundException, SQLException {
 		
 		// GIVEN
         TicketDAO ticketDAO3 = new TicketDAO();
@@ -126,4 +126,24 @@ public class TicketDAOTest {
         // ASSERT
         assertTrue(!test);
     }
+
+    @Test
+    public void shouldReturnTrueIfOccurrenceSupTo1For5PercentReduction() throws SQLException, ClassNotFoundException {
+        //ARRANGE
+        ticketDAO.saveTicket(ticket);
+        Ticket ticket2 = ticketDAO.getTicket(regNumberString);
+        ticket2.setOutTime(new Date(System.currentTimeMillis()));
+        ticketDAO.saveTicket(ticket2);
+        Ticket ticket3 = new Ticket();
+        ticket3.setVehicleRegNumber(regNumberString);
+        ticketDAO.saveTicket(ticket3);
+
+        Ticket ticket4 = ticketDAO.getTicket(regNumberString);
+        // ACT
+        boolean test = ticketDAO.availableReduction5Percent(ticket4);
+
+        // ASSERT
+        assertTrue(test);
+    }
+
 }

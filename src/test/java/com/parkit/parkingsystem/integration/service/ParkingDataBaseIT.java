@@ -18,6 +18,8 @@ import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 
+import java.sql.SQLException;
+
 @ExtendWith(MockitoExtension.class)
 public class ParkingDataBaseIT {
 
@@ -84,5 +86,22 @@ public class ParkingDataBaseIT {
 		assertEquals(ticket2.getVehicleRegNumber(), ticket.getVehicleRegNumber());
 	}
 
+	@Test
+	public void testRecurrentVehicleReductionAvailable() throws InterruptedException, SQLException, ClassNotFoundException {
+		//ARRANGE
+		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(regNumberString);
+
+		//ACT
+		parkingService.processIncomingVehicle();
+		Thread.sleep(1000);
+		parkingService.processExitingVehicle();
+		parkingService.processIncomingVehicle();
+		Ticket ticket2 = ticketDAO.getTicket(regNumberString);
+		boolean test = ticketDAO.availableReduction5Percent(ticket2);
+
+		//ASSERT
+		assertTrue(test);
+	}
 
 }
