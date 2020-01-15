@@ -34,7 +34,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
-	@DisplayName("calculate fare car 1h")
+	@DisplayName("calculate Fare car 1h")
 	public void calculateFareCar() {
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
@@ -49,7 +49,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
-	@DisplayName("calculate fare bike 1h")
+	@DisplayName("calculate Fare bike 1h")
 	public void calculateFareBike() {
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
@@ -174,7 +174,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
-	@DisplayName("calculate Fare Care Recuring User")
+	@DisplayName("calculate Fare Care Recuring User 1h")
 	public void calculateFareCarRecuringUser() {
 		Date inTime = new Date();
 		count = 2;
@@ -190,7 +190,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
-	@DisplayName("calculate Fare Bike Recuring User")
+	@DisplayName("calculate Fare Bike Recuring User 1h")
 	public void calculateFareBikeRecuringUser() {
 		Date inTime = new Date();
 		count = 2;
