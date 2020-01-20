@@ -19,7 +19,7 @@ public class FareCalculatorService {
 
 		double duration = (outHour - inHour) / (1000 * 60 * 60);
 
-		if (applyReduction == true) {
+		if (applyReduction) {
 			reduction = 0.95;
 		} else {
 			reduction = 1;

@@ -41,9 +41,7 @@ public class FareCalculatorServiceTest {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 		Date inTime = sdf.parse("1982/03/24 09:30");
-
-		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		Date outTime = sdf1.parse("1982/03/24 10:30");
+		Date outTime = sdf.parse("1982/03/24 10:30");
 
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 
@@ -59,9 +57,7 @@ public class FareCalculatorServiceTest {
 	public void calculateFareBike() throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 		Date inTime = sdf.parse("1982/03/24 09:30");
-
-		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		Date outTime = sdf1.parse("1982/03/24 10:30");
+		Date outTime = sdf.parse("1982/03/24 10:30");
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
 
 		ticket.setInTime(inTime);
@@ -76,9 +72,7 @@ public class FareCalculatorServiceTest {
 	public void calculateFareUnkownType() throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 		Date inTime = sdf.parse("1982/03/24 09:30");
-
-		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		Date outTime = sdf1.parse("1982/03/24 10:30");
+		Date outTime = sdf.parse("1982/03/24 10:30");
 		ParkingSpot parkingSpot = new ParkingSpot(1, null, false);
 
 		ticket.setInTime(inTime);
@@ -92,9 +86,7 @@ public class FareCalculatorServiceTest {
 	public void calculateFareBikeWithFutureInTime() throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 		Date inTime = sdf.parse("1983/03/24 09:30");
-
-		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		Date outTime = sdf1.parse("1982/03/24 10:30");
+		Date outTime = sdf.parse("1982/03/24 10:30");
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
 
 		ticket.setInTime(inTime);
@@ -108,9 +100,7 @@ public class FareCalculatorServiceTest {
 	public void calculateFareBikeWithLessThanOneHourParkingTime() throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 		Date inTime = sdf.parse("1982/03/24 09:30");
-
-		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		Date outTime = sdf1.parse("1982/03/24 10:15");
+		Date outTime = sdf.parse("1982/03/24 10:15");
 
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
 
@@ -127,9 +117,7 @@ public class FareCalculatorServiceTest {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 		Date inTime = sdf.parse("1982/03/24 09:30");
-
-		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		Date outTime = sdf1.parse("1982/03/24 10:15");
+		Date outTime = sdf.parse("1982/03/24 10:15");
 
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 
@@ -145,9 +133,7 @@ public class FareCalculatorServiceTest {
 	public void calculateFareBikeWithLessThanHalfHourParkingTime() throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 		Date inTime = sdf.parse("1982/03/24 09:30");
-
-		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		Date outTime = sdf1.parse("1982/03/24 09:40");
+		Date outTime = sdf.parse("1982/03/24 09:40");
 
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
 
@@ -163,9 +149,7 @@ public class FareCalculatorServiceTest {
 	public void calculateFareCarWithLessThanHalfHourParkingTime() throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 		Date inTime = sdf.parse("1982/03/24 09:30");
-
-		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		Date outTime = sdf1.parse("1982/03/24 09:40");
+		Date outTime = sdf.parse("1982/03/24 09:40");
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 
 		ticket.setInTime(inTime);
@@ -180,9 +164,7 @@ public class FareCalculatorServiceTest {
 	public void calculateFareCarWithMoreThanADayParkingTime() throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 		Date inTime = sdf.parse("1982/03/24 09:30");
-
-		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		Date outTime = sdf1.parse("1982/03/26 09:30");
+		Date outTime = sdf.parse("1982/03/26 09:30");
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 
 		ticket.setInTime(inTime);
@@ -197,9 +179,7 @@ public class FareCalculatorServiceTest {
 	public void calculateFareBikeWithMoreThanADayParkingTime() throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 		Date inTime = sdf.parse("1982/03/24 09:30");
-
-		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		Date outTime = sdf1.parse("1982/03/26 09:30");
+		Date outTime = sdf.parse("1982/03/26 09:30");
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
 
 		ticket.setInTime(inTime);
@@ -214,9 +194,7 @@ public class FareCalculatorServiceTest {
 	public void calculateFareCarRecuringUser() throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 		Date inTime = sdf.parse("1982/03/24 09:30");
-
-		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		Date outTime = sdf1.parse("1982/03/24 10:30");
+		Date outTime = sdf.parse("1982/03/24 10:30");
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 		boolean applyReduction = true;
 
@@ -232,9 +210,7 @@ public class FareCalculatorServiceTest {
 	public void calculateFareBikeRecuringUser() throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 		Date inTime = sdf.parse("1982/03/24 09:30");
-
-		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		Date outTime = sdf1.parse("1982/03/24 10:30");
+		Date outTime = sdf.parse("1982/03/24 10:30");
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
 		boolean applyReduction = true;
 

@@ -8,7 +8,6 @@ import java.util.Date;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,13 +43,6 @@ public class ParkingDataBaseIT {
 		dataBasePrepareService = new DataBasePrepareService();
 	}
 
-	@BeforeEach
-	private void setUpPerTest() throws Exception {
-		when(inputReaderUtil.readSelection()).thenReturn(1);
-		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-		dataBasePrepareService.clearDataBaseEntries();
-	}
-
 	@AfterAll
 	private static void tearDown() {
 
@@ -59,6 +51,9 @@ public class ParkingDataBaseIT {
 	@Test
 	@DisplayName("test Parking Car")
 	public void testParkingACar() throws Exception {
+		when(inputReaderUtil.readSelection()).thenReturn(1);
+		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+		dataBasePrepareService.clearDataBaseEntries();
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		parkingService.processIncomingVehicle();
 		// TODO: check that a ticket is actualy saved in DB and Parking table is updated
@@ -70,55 +65,53 @@ public class ParkingDataBaseIT {
 	}
 
 	@Test
-	@DisplayName("test Parking Exit Car")
+	@DisplayName("test Parking Exit Car 1h")
 	public void testParkingLotExit() throws Exception {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		Date inTime = sdf.parse("1982/03/24 09:30");
-
-		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		Date outTime = sdf1.parse("1982/03/26 09:30");
-
-		Ticket ticket = new Ticket();
-
-		ticket.setVehicleRegNumber("ABCDEF");
-		ticket.setPrice(0);
-		ticket.setInTime(inTime);
-		ticket.setOutTime(outTime);
-		ticketDAO.saveTicket(ticket);
+		when(inputReaderUtil.readSelection()).thenReturn(1);
+		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEFG");
+		dataBasePrepareService.clearDataBaseEntries();
 
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		parkingService.processIncomingVehicle();
 
-		ParkingService parkingServiceOut = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-		parkingServiceOut.processExitingVehicle();
+		Ticket getTicketTest = ticketDAO.getTicket("ABCDEFG");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+		Date inTime = sdf.parse("1982/03/24 09:30");
+		Date outTime = sdf.parse("1982/03/24 10:30");
+
+		getTicketTest.setInTime(inTime);
+		getTicketTest.setOutTime(outTime);
+		getTicketTest.setPrice(1.5);
+
+		ticketDAO.updateTicket(getTicketTest);
+
 		// TODO: check that the fare generated and out time are populated correctly in
 		// the database
 
-		Ticket getTicketTest = ticketDAO.getTicket("ABCDEF");
-		Date dateEntry = getTicketTest.getInTime();
 		Date dateExit = getTicketTest.getOutTime();
 
-		long duration = (dateExit.getTime() - dateEntry.getTime()) / (1000 * 3600);
-		System.out.println(duration);
+		double priceExpected = Fare.CAR_RATE_PER_HOUR * 1;
 
-		long priceExpected = (long) Fare.CAR_RATE_PER_HOUR * duration;
-
-		long price = (long) getTicketTest.getPrice();
+		double price = getTicketTest.getPrice();
 
 		assertThat(priceExpected).isEqualTo(price);
+		assertThat(outTime).isEqualTo(dateExit);
 
 	}
 
 	@Test
 	@DisplayName("Vehicle Already Enter")
 	public void VehicleAlreadyEnterTest() throws Exception {
+		when(inputReaderUtil.readSelection()).thenReturn(1);
+		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEFH");
+		dataBasePrepareService.clearDataBaseEntries();
 		ParkingService parkingServiceIn1 = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		parkingServiceIn1.processIncomingVehicle();
 
 		ParkingService parkingServiceIn2 = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		parkingServiceIn2.processIncomingVehicle();
 
-		int countUser = ticketDAO.countUser("ABCDEF");
+		int countUser = ticketDAO.countUser("ABCDEFH");
 
 		assertThat(countUser).isEqualTo(1);
 

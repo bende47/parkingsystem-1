@@ -33,11 +33,12 @@ public class ParkingService {
 		try {
 			ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
 			String vehicleRegNumber = getVehichleRegNumber();
+
 			if (isEnter(vehicleRegNumber) == true) {
 				System.out.println("\nVehicule already enter, please exit vehicule before enter \n");
 			}
 
-			if (parkingSpot != null && parkingSpot.getId() > 0 && isEnter(vehicleRegNumber) == false) {
+			if (parkingSpot != null && parkingSpot.getId() > 0 && !isEnter(vehicleRegNumber)) {
 
 				checkRecurringUsers(vehicleRegNumber);
 				if (isEnter(vehicleRegNumber) == true) {
