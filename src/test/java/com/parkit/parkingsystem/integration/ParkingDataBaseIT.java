@@ -3,6 +3,7 @@ package com.parkit.parkingsystem.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.junit.jupiter.api.AfterAll;
@@ -57,24 +58,39 @@ public class ParkingDataBaseIT {
 
 	@Test
 	@DisplayName("test Parking Car")
-	public void testParkingACar() {
+	public void testParkingACar() throws Exception {
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		parkingService.processIncomingVehicle();
 		// TODO: check that a ticket is actualy saved in DB and Parking table is updated
 		// with availability
 		Ticket getTicketTest = ticketDAO.getTicket("ABCDEF");
-		assertThat(getTicketTest.getId()).isEqualTo(1);
+		assertThat(getTicketTest.getVehicleRegNumber()).isEqualTo("ABCDEF");
 		assertThat(getTicketTest.getParkingSpot().isAvailable()).isEqualTo(false);
 
 	}
 
 	@Test
 	@DisplayName("test Parking Exit Car")
-	public void testParkingLotExit() {
-		testParkingACar();
+	public void testParkingLotExit() throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+		Date inTime = sdf.parse("1982/03/24 09:30");
+
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+		Date outTime = sdf1.parse("1982/03/26 09:30");
+
+		Ticket ticket = new Ticket();
+
+		ticket.setVehicleRegNumber("ABCDEF");
+		ticket.setPrice(0);
+		ticket.setInTime(inTime);
+		ticket.setOutTime(outTime);
+		ticketDAO.saveTicket(ticket);
 
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-		parkingService.processExitingVehicle();
+		parkingService.processIncomingVehicle();
+
+		ParkingService parkingServiceOut = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		parkingServiceOut.processExitingVehicle();
 		// TODO: check that the fare generated and out time are populated correctly in
 		// the database
 
@@ -83,12 +99,28 @@ public class ParkingDataBaseIT {
 		Date dateExit = getTicketTest.getOutTime();
 
 		long duration = (dateExit.getTime() - dateEntry.getTime()) / (1000 * 3600);
+		System.out.println(duration);
 
 		long priceExpected = (long) Fare.CAR_RATE_PER_HOUR * duration;
 
 		long price = (long) getTicketTest.getPrice();
 
 		assertThat(priceExpected).isEqualTo(price);
+
+	}
+
+	@Test
+	@DisplayName("Vehicle Already Enter")
+	public void VehicleAlreadyEnterTest() throws Exception {
+		ParkingService parkingServiceIn1 = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		parkingServiceIn1.processIncomingVehicle();
+
+		ParkingService parkingServiceIn2 = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		parkingServiceIn2.processIncomingVehicle();
+
+		int countUser = ticketDAO.countUser("ABCDEF");
+
+		assertThat(countUser).isEqualTo(1);
 
 	}
 

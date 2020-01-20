@@ -88,7 +88,34 @@ public class TicketDAO {
 		return false;
 	}
 
-	public int recurringUser(String vehicleRegNumber) {
+	public boolean recurringUser(String vehicleRegNumber) {
+		Connection con = null;
+		ResultSet rs = null;
+		boolean applyReduction = false;
+		int count = 0;
+		try {
+			con = dataBaseConfig.getConnection();
+			PreparedStatement ps = con.prepareStatement(DBConstants.USER_RECURRING);
+			ps.setString(1, vehicleRegNumber);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				count = rs.getInt(1);
+
+			}
+			if (count >= 1) {
+				applyReduction = true;
+			}
+			dataBaseConfig.closeResultSet(rs);
+			dataBaseConfig.closePreparedStatement(ps);
+		} catch (Exception ex) {
+			logger.error("Error fetching next available slot", ex);
+		} finally {
+			dataBaseConfig.closeConnection(con);
+			return applyReduction;
+		}
+	}
+
+	public int countUser(String vehicleRegNumber) {
 		Connection con = null;
 		ResultSet rs = null;
 		int count = 0;

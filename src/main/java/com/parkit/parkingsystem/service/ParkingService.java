@@ -28,12 +28,22 @@ public class ParkingService {
 		this.ticketDAO = ticketDAO;
 	}
 
-	public void processIncomingVehicle() {
+	public void processIncomingVehicle() throws Exception {
+
 		try {
 			ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
-			if (parkingSpot != null && parkingSpot.getId() > 0) {
-				String vehicleRegNumber = getVehichleRegNumber();
+			String vehicleRegNumber = getVehichleRegNumber();
+			if (isEnter(vehicleRegNumber) == true) {
+				System.out.println("\nVehicule already enter, please exit vehicule before enter \n");
+			}
+
+			if (parkingSpot != null && parkingSpot.getId() > 0 && isEnter(vehicleRegNumber) == false) {
+
 				checkRecurringUsers(vehicleRegNumber);
+				if (isEnter(vehicleRegNumber) == true) {
+					System.out.println("\nVehicule already enter, please exit vehicule before enter \n");
+				}
+
 				parkingSpot.setAvailable(false);
 				parkingSpotDAO.updateParking(parkingSpot);// allot this parking space and mark it's availability as
 															// false
@@ -51,6 +61,7 @@ public class ParkingService {
 				System.out.println("Generated Ticket and saved in DB");
 				System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
 				System.out.println("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:" + inTime);
+
 			}
 		} catch (Exception e) {
 			logger.error("Unable to process incoming vehicle", e);
@@ -58,12 +69,21 @@ public class ParkingService {
 	}
 
 	public void checkRecurringUsers(String regNumber) {
-		String vehicleRegNumber = regNumber;
-		Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
+		Ticket ticket = ticketDAO.getTicket(regNumber);
 		if (ticket != null) {
 			System.out.println(
 					"\n Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount \n");
 		}
+
+	}
+
+	public boolean isEnter(String regNumber) {
+		boolean enter = false;
+		Ticket ticket = ticketDAO.getTicket(regNumber);
+		if (ticket != null) {
+			enter = true;
+		}
+		return enter;
 
 	}
 
@@ -116,8 +136,9 @@ public class ParkingService {
 			Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
 			Date outTime = new Date();
 			ticket.setOutTime(outTime);
-			int count = ticketDAO.recurringUser(vehicleRegNumber);
-			fareCalculatorService.calculateFare(ticket, count);
+			boolean applyReduction = ticketDAO.recurringUser(vehicleRegNumber);
+
+			fareCalculatorService.calculateFare(ticket, applyReduction);
 			if (ticketDAO.updateTicket(ticket)) {
 				ParkingSpot parkingSpot = ticket.getParkingSpot();
 				parkingSpot.setAvailable(true);
