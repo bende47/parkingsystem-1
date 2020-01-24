@@ -34,14 +34,16 @@ public class ParkingService {
 			ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
 			String vehicleRegNumber = getVehichleRegNumber();
 
-			if (isEnter(vehicleRegNumber) == true) {
+			Ticket vehicule = ticketDAO.getTicket(vehicleRegNumber);
+
+			if (vehiculeAllowEnter(vehicule) == true) {
 				System.out.println("\nVehicule already enter, please exit vehicule before enter \n");
 			}
 
-			if (parkingSpot != null && parkingSpot.getId() > 0 && !isEnter(vehicleRegNumber)) {
+			if (parkingSpot != null && parkingSpot.getId() > 0 && !vehiculeAllowEnter(vehicule)) {
 
 				checkRecurringUsers(vehicleRegNumber);
-				if (isEnter(vehicleRegNumber) == true) {
+				if (vehiculeAllowEnter(vehicule) == true) {
 					System.out.println("\nVehicule already enter, please exit vehicule before enter \n");
 				}
 
@@ -78,14 +80,10 @@ public class ParkingService {
 
 	}
 
-	public boolean isEnter(String regNumber) {
-		boolean enter = false;
-		Ticket ticket = ticketDAO.getTicket(regNumber);
-		if (ticket != null) {
-			enter = true;
-		}
-		return enter;
+	public static boolean vehiculeAllowEnter(Ticket ticket) {
 
+		return ticket != null && ticket.getOutTime() == null;
+		// return ticket == null || ticket.getOutTime() != null;
 	}
 
 	private String getVehichleRegNumber() throws Exception {
@@ -154,4 +152,5 @@ public class ParkingService {
 			logger.error("Unable to process exiting vehicle", e);
 		}
 	}
+
 }

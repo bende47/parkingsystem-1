@@ -27,6 +27,7 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 public class ParkingServiceTest {
 
 	private static ParkingService parkingService;
+	private static TicketDAO newTicketDAO;
 
 	@Mock
 	private static InputReaderUtil inputReaderUtil;

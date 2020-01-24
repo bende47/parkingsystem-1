@@ -86,7 +86,7 @@
 				<plugin>
 		            <groupId>org.codehaus.mojo</groupId>
 		            <artifactId>findbugs-maven-plugin</artifactId>
-		            <version>3.0.4</version>
+		            <version>3.0.5</version>
 	        	</plugin>
 		    </plugins>
 	  	</reporting>
@@ -174,20 +174,9 @@
             <plugin>
 			    <groupId>org.codehaus.mojo</groupId>
 			    <artifactId>findbugs-maven-plugin</artifactId>
-			    <version>3.0.4</version>
-			    <configuration>
-			        <effort>Max</effort>
-			        <onlyAnalyze>org.baeldung.web.controller.*</onlyAnalyze>
-				    <omitVisitors>FindNullDeref</omitVisitors>
-				    <visitors>FindReturnRef</visitors>
-			    </configuration>
-			    <executions>
-			        <execution>
-			            <goals>
-			                <goal>check</goal>
-			            </goals>
-			        </execution>
-			    </executions>
+			    <version>3.0.5</version>
+			    
+			    
 			</plugin>
         </plugins>
     </build>

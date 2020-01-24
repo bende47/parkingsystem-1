@@ -3,6 +3,7 @@ package com.parkit.parkingsystem.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -74,25 +75,23 @@ public class ParkingDataBaseIT {
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		parkingService.processIncomingVehicle();
 
-		Ticket getTicketTest = ticketDAO.getTicket("ABCDEFG");
+		Ticket TicketTest = ticketDAO.getTicket("ABCDEFG");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		Date inTime = sdf.parse("1982/03/24 09:30");
-		Date outTime = sdf.parse("1982/03/24 10:30");
+		Date outTime = sdf.parse("2020/03/24 10:30");
 
-		getTicketTest.setInTime(inTime);
-		getTicketTest.setOutTime(outTime);
-		getTicketTest.setPrice(1.5);
+		TicketTest.setOutTime(outTime);
+		TicketTest.setPrice(1.5);
 
-		ticketDAO.updateTicket(getTicketTest);
+		ticketDAO.updateTicket(TicketTest);
 
 		// TODO: check that the fare generated and out time are populated correctly in
 		// the database
 
-		Date dateExit = getTicketTest.getOutTime();
+		Date dateExit = TicketTest.getOutTime();
 
 		double priceExpected = Fare.CAR_RATE_PER_HOUR * 1;
 
-		double price = getTicketTest.getPrice();
+		double price = TicketTest.getPrice();
 
 		assertThat(priceExpected).isEqualTo(price);
 		assertThat(outTime).isEqualTo(dateExit);
@@ -115,6 +114,25 @@ public class ParkingDataBaseIT {
 
 		assertThat(countUser).isEqualTo(1);
 
+	}
+
+	@Test
+	@DisplayName("Vehicule Is Allow Enter")
+	public void vehiculeIsEnterTest() throws ParseException {
+		Ticket ticket1 = new Ticket();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+		Date outTime = sdf.parse("2020/03/24 10:30");
+
+		ticket1.setVehicleRegNumber("AZERTY");
+		ticket1.setOutTime(outTime);
+
+		Ticket ticket2 = new Ticket();
+
+		ticket2.setVehicleRegNumber("AZERTY");
+
+		boolean allowEnter = ParkingService.vehiculeAllowEnter(ticket2);
+
+		assertThat(allowEnter).isEqualTo(true);
 	}
 
 }
