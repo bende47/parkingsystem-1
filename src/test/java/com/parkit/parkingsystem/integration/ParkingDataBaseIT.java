@@ -130,7 +130,7 @@ public class ParkingDataBaseIT {
 
 		ticket2.setVehicleRegNumber("AZERTY");
 
-		boolean allowEnter = ParkingService.vehiculeAllowEnter(ticket2);
+		boolean allowEnter = ParkingService.vehiculeAlreadyEnter(ticket2);
 
 		assertThat(allowEnter).isEqualTo(true);
 	}

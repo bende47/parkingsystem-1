@@ -36,14 +36,14 @@ public class ParkingService {
 
 			Ticket vehicule = ticketDAO.getTicket(vehicleRegNumber);
 
-			if (vehiculeAllowEnter(vehicule) == true) {
+			if (vehiculeAlreadyEnter(vehicule) == true) {
 				System.out.println("\nVehicule already enter, please exit vehicule before enter \n");
 			}
 
-			if (parkingSpot != null && parkingSpot.getId() > 0 && !vehiculeAllowEnter(vehicule)) {
+			if (parkingSpot != null && parkingSpot.getId() > 0 && !vehiculeAlreadyEnter(vehicule)) {
 
 				checkRecurringUsers(vehicleRegNumber);
-				if (vehiculeAllowEnter(vehicule) == true) {
+				if (vehiculeAlreadyEnter(vehicule) == true) {
 					System.out.println("\nVehicule already enter, please exit vehicule before enter \n");
 				}
 
@@ -80,10 +80,10 @@ public class ParkingService {
 
 	}
 
-	public static boolean vehiculeAllowEnter(Ticket ticket) {
+	public static boolean vehiculeAlreadyEnter(Ticket ticket) {
 
 		return ticket != null && ticket.getOutTime() == null;
-		// return ticket == null || ticket.getOutTime() != null;
+
 	}
 
 	private String getVehichleRegNumber() throws Exception {

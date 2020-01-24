@@ -83,17 +83,18 @@
 		          </reportSet>
 		        </reportSets>
 		      </plugin>
-				<plugin>
-		            <groupId>org.codehaus.mojo</groupId>
-		            <artifactId>findbugs-maven-plugin</artifactId>
-		            <version>3.0.5</version>
-	        	</plugin>
+		      <plugin>
+		        <groupId>com.github.spotbugs</groupId>
+		        <artifactId>spotbugs-maven-plugin</artifactId>
+		        <version>3.1.12</version>
+		      </plugin>
 		    </plugins>
 	  	</reporting>
 	  
 
     <build>
-        <plugins>
+	        <plugins>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -171,13 +172,24 @@
                     </execution>
                 </executions>
             </plugin>
+            
             <plugin>
-			    <groupId>org.codehaus.mojo</groupId>
-			    <artifactId>findbugs-maven-plugin</artifactId>
-			    <version>3.0.5</version>
-			    
-			    
-			</plugin>
+		        <groupId>com.github.spotbugs</groupId>
+		        <artifactId>spotbugs-maven-plugin</artifactId>
+		        <version>3.1.12</version>
+		    </plugin>
+		     <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.0.0</version>
+            </plugin>
+
         </plugins>
     </build>
 
