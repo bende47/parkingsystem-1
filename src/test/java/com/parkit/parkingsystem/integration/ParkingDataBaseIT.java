@@ -110,9 +110,11 @@ public class ParkingDataBaseIT {
 		ParkingService parkingServiceIn2 = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		parkingServiceIn2.processIncomingVehicle();
 
-		int countUser = ticketDAO.countUser("ABCDEFH");
+		Ticket ticket2 = ticketDAO.getTicket("ABCDEFH");
 
-		assertThat(countUser).isEqualTo(1);
+		boolean allowEnter = ParkingService.vehiculeAlreadyEnter(ticket2);
+
+		assertThat(allowEnter).isEqualTo(true);
 
 	}
 
